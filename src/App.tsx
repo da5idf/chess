@@ -1,10 +1,11 @@
-import logo from './logo.svg';
 import './App.css';
+import { ChessBoard } from './ChessBoard';
 
 function App() {
 	return (
-		<div className="App">
-			<canvas id="chessCanvas" width="400" height="400"></canvas>
+		<div>
+			<div className="App"></div>
+			<ChessBoard />
 		</div>
 	);
 }
