@@ -1,3 +1,5 @@
 export { initialBoard } from './initialBoard';
-export { drawBoard } from './drawBoard';
+export { getActiveSquare } from './getActiveSquare';
 export { getPiece } from './getPiece';
+export { getPieceFromClassList } from './getPieceFromClassList';
+export { hoverPiece } from './hoverPiece';
