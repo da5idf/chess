@@ -1,9 +1,11 @@
 import { useState } from 'react';
 
 import { ChessBoardGrid, DraggedPiece } from './StyledComponents';
-import { getActiveSquare, hoverPiece, initialBoard } from '../../logic';
+import { initialBoard } from '../../logic';
 import { handleMouseMove } from './helpers';
 import { Square } from '../Square';
+import { handleMouseDown, handleMouseUp } from './helpers/handleMouseActions';
+import { pieces } from '../../assets/pieces';
 
 type Props = {};
 
@@ -13,27 +15,11 @@ export function ChessBoard({}: Props) {
 	const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 	const [draggedPiece, setDraggedPiece] = useState<string>('');
 
-	const handleMouseDown = ({ piece, row, col }) => {
-		console.log('BOARD STATE', boardState[6]);
-		setDraggedPiece(piece);
-		setPrevBoardState(boardState);
-
-		const tempBoardState = boardState.map(row => [...row]);
-		tempBoardState[row][col] = '';
-		setBoardState(tempBoardState);
-	};
-
-	const handleMouseUp = () => {
-		setBoardState(prevBoardState);
-	};
-
 	return (
 		<ChessBoardGrid
 			id="ChessBoard"
-			// onMouseDown={e => getActiveSquare(e, setActiveSquare)}
-			// onMouseMove={e => handleMouseMove(e, setMousePosition)}
+			onMouseMove={e => handleMouseMove(e, setMousePosition)}
 		>
-			{/* <DraggedPiece positionX={} /> */}
 			{boardState.map((row, rowIndex) => {
 				return row.map((piece, colIndex) => {
 					const isDark = (rowIndex + colIndex) % 2 === 1;
@@ -43,13 +29,34 @@ export function ChessBoard({}: Props) {
 							piece={piece}
 							isDark={isDark}
 							onMouseDown={() =>
-								handleMouseDown({ piece, row: rowIndex, col: colIndex })
+								handleMouseDown({
+									piece,
+									row: rowIndex,
+									col: colIndex,
+									boardState,
+									setDraggedPiece,
+									setPrevBoardState,
+									setBoardState,
+								})
 							}
-							onMouseUp={handleMouseUp}
+							onMouseUp={() =>
+								handleMouseUp({
+									setBoardState,
+									boardState: prevBoardState,
+									setDraggedPiece,
+								})
+							}
 						/>
 					);
 				});
 			})}
+			{draggedPiece && (
+				<DraggedPiece
+					src={pieces[draggedPiece]}
+					$positionX={mousePosition.x}
+					$positionY={mousePosition.y}
+				/>
+			)}
 		</ChessBoardGrid>
 	);
 }
