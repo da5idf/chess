@@ -2,10 +2,11 @@ import styled from 'styled-components';
 import { pieces } from '../../assets/pieces';
 
 type Props = {
+	rank: number;
+	file: number;
 	piece: string;
 	isDark: boolean;
 	onMouseDown: () => void;
-	onMouseUp: () => void;
 };
 
 const StyledSquare = styled.div<{ $isDark: boolean }>`
@@ -17,12 +18,13 @@ const StyledSquare = styled.div<{ $isDark: boolean }>`
 	background-color: ${props => (props.$isDark ? 'green' : 'lightgray')};
 `;
 
-export const Square = ({ piece, isDark, onMouseDown, onMouseUp }: Props) => {
+export const Square = ({ rank, file, piece, isDark, onMouseDown }: Props) => {
 	return (
 		<StyledSquare
+			data-rank={rank}
+			data-file={file}
 			$isDark={isDark}
 			onMouseDown={onMouseDown}
-			onMouseUp={onMouseUp}
 		>
 			<img src={pieces[piece]} />
 		</StyledSquare>
