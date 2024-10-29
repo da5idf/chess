@@ -7,16 +7,21 @@ export const ChessBoardGrid = styled.div`
 	width: fit-content;
 `;
 
-type DraggedPieceProps = {
+interface DraggedPieceProps {
 	$positionX: number;
 	$positionY: number;
-};
+}
 
-export const DraggedPiece = styled.img<DraggedPieceProps>`
+export const DraggedPiece = styled.img.attrs<DraggedPieceProps>(
+	({ $positionX, $positionY }) => ({
+		style: {
+			left: `${$positionX}px`,
+			top: `${$positionY}px`,
+		},
+	})
+)`
 	position: absolute;
 	width: 50px;
 	height: 50px;
-	left: ${({ $positionX }) => $positionX - 25}px;
-	top: ${({ $positionY }) => $positionY - 25}px;
 	pointer-events: none;
 `;
