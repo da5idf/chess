@@ -1,12 +1,12 @@
 import styled from 'styled-components';
-import { pieces } from '../../assets/pieces';
+import { setPiece } from '../../redux/gameSlice';
+import { useAppDispatch } from '../../hooks/reduxHooks';
 
 type Props = {
 	rank: number;
 	file: number;
 	piece: string;
 	isDark: boolean;
-	onMouseDown: () => void;
 };
 
 const StyledSquare = styled.div<{ $isDark: boolean }>`
@@ -18,15 +18,23 @@ const StyledSquare = styled.div<{ $isDark: boolean }>`
 	background-color: ${props => (props.$isDark ? 'green' : 'lightgray')};
 `;
 
-export const Square = ({ rank, file, piece, isDark, onMouseDown }: Props) => {
+export const Square = ({ rank, file, piece, isDark }: Props) => {
+	const dispatch = useAppDispatch();
+
 	return (
 		<StyledSquare
 			data-rank={rank}
 			data-file={file}
 			$isDark={isDark}
-			onMouseDown={onMouseDown}
+			onClick={() => dispatch(setPiece(piece))}
 		>
-			<img src={pieces[piece]} />
+			{piece && (
+				<img
+					src={require(`../../assets/${piece}.png`)}
+					width="45px"
+					height="45px"
+				/>
+			)}
 		</StyledSquare>
 	);
 };
