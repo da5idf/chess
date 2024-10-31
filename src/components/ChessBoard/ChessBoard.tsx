@@ -2,16 +2,18 @@ import { useState } from 'react';
 import { useAppSelector } from '../../hooks/reduxHooks';
 
 import { ChessBoardGrid } from './StyledComponents';
-import { initialBoard } from '../../logic';
 import { Square } from '../Square';
+import { DraggedPiece } from '../DraggedPiece';
 
 type Props = {};
 
 export function ChessBoard({}: Props) {
-	const [boardState, setBoardState] = useState<string[][]>(initialBoard);
+	const piece1 = useAppSelector(state => state.draggedPiece.name);
+	const board = useAppSelector(state => state.game.board);
 
-	const piece1 = useAppSelector(state => state.game.piece);
-	console.log({ piece1 });
+	const [boardState, setBoardState] = useState<string[][]>(board);
+
+	console.log({ piece1, rook: boardState[7] && boardState[7][7] });
 
 	return (
 		<ChessBoardGrid id="ChessBoard">
@@ -29,6 +31,7 @@ export function ChessBoard({}: Props) {
 					);
 				});
 			})}
+			<DraggedPiece />
 		</ChessBoardGrid>
 	);
 }

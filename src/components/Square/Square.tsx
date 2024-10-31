@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import { setPiece } from '../../redux/gameSlice';
 import { useAppDispatch } from '../../hooks/reduxHooks';
+import { setDraggedPiece } from '../../redux/draggedPieceSlice';
 
 type Props = {
 	rank: number;
@@ -19,17 +19,29 @@ const StyledSquare = styled.div<{ $isDark: boolean }>`
 `;
 
 export const Square = ({ rank, file, piece, isDark }: Props) => {
+	console.log('SQUARE!');
 	const dispatch = useAppDispatch();
+
+	const handleMouseDown = (e: React.MouseEvent, piece: string) => {
+		dispatch(setDraggedPiece({ name: piece, rank, file }));
+
+		const pieceImage = document.getElementById(`rank${rank},file${file}`);
+
+		if (pieceImage) {
+			pieceImage.style.display = 'none';
+		}
+	};
 
 	return (
 		<StyledSquare
 			data-rank={rank}
 			data-file={file}
 			$isDark={isDark}
-			onClick={() => dispatch(setPiece(piece))}
+			onMouseDown={e => handleMouseDown(e, piece)}
 		>
 			{piece && (
 				<img
+					id={`rank${rank},file${file}`}
 					src={require(`../../assets/${piece}.png`)}
 					width="45px"
 					height="45px"

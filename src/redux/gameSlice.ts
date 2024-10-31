@@ -1,3 +1,4 @@
+import { initialBoard } from '../logic';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface GameState {
@@ -5,19 +6,23 @@ export interface GameState {
 }
 
 const initialState = {
-	piece: '',
+	draggedPiece: { piece: '', rank: null, file: null },
+	board: initialBoard,
 };
 
 export const gameSlice = createSlice({
 	name: 'game',
 	initialState,
 	reducers: {
-		setPiece: (state, action: PayloadAction<string>) => {
-			state.piece = action.payload;
+		updateSquare: (
+			state,
+			action: PayloadAction<{ rank: number; file: number }>
+		) => {
+			state.board[action.payload.rank][action.payload.file] = '';
 		},
 	},
 });
 
-export const { setPiece } = gameSlice.actions;
+export const { updateSquare } = gameSlice.actions;
 
 export default gameSlice.reducer;
