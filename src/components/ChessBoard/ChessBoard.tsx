@@ -3,7 +3,6 @@ import { useAppSelector } from '../../hooks/reduxHooks';
 
 import { ChessBoardGrid } from './StyledComponents';
 import { Square } from '../Square';
-import { DraggedPiece } from '../DraggedPiece';
 
 type Props = {};
 
@@ -28,7 +27,6 @@ export function ChessBoard({}: Props) {
 					);
 				});
 			})}
-			<DraggedPiece />
 		</ChessBoardGrid>
 	);
 }

@@ -30,13 +30,41 @@ export const DraggedPiece = () => {
 		rank,
 		file,
 	} = useAppSelector(state => state.draggedPiece);
-	const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+	const [piecePosition, setPiecePosition] = useState({ x: 0, y: 0 });
 
-	const handleMouseMove = (e: React.MouseEvent) => {
-		setMousePosition({ x: e.clientX, y: e.clientY });
+	const handleMouseMove = (e: MouseEvent) => {
+		const board = document.getElementById('ChessBoard');
+		if (!board) return;
+		const { top, bottom, left, right } = board.getBoundingClientRect();
+
+		const mouseX = e.clientX;
+		const mouseY = e.clientY;
+
+		let newX: number;
+		let newY: number;
+
+		if (mouseX < left) {
+			newX = left;
+		} else if (mouseX > right) {
+			newX = right;
+		} else {
+			newX = mouseX;
+		}
+
+		if (mouseY < top) {
+			newY = top;
+		} else if (mouseY > bottom) {
+			newY = bottom;
+		} else {
+			newY = mouseY;
+		}
+
+		setPiecePosition({ x: newX, y: newY });
 	};
 
-	const handleMouseUp = (e: React.MouseEvent) => {
+	const handleMouseUp = () => {
+		if (!piece) return;
+
 		dispatch(setDraggedPiece({ name: '', rank, file }));
 
 		const pieceImage = document.getElementById(`rank${rank},file${file}`);
@@ -60,8 +88,8 @@ export const DraggedPiece = () => {
 
 	return (
 		<MovingPiece
-			$positionX={mousePosition.x}
-			$positionY={mousePosition.y}
+			$positionX={piecePosition.x}
+			$positionY={piecePosition.y}
 			src={require(`../../assets/${piece}.png`)}
 		/>
 	);

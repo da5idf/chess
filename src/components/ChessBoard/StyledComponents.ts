@@ -5,6 +5,7 @@ export const ChessBoardGrid = styled.div`
 	display: grid;
 	grid-template-columns: repeat(8, 50px);
 	width: fit-content;
+	overflow: hidden;
 `;
 
 interface DraggedPieceProps {
