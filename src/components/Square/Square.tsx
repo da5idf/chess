@@ -17,10 +17,10 @@ const StyledSquare = styled.div<{ $isDark: boolean; $hasPiece: boolean }>`
 	height: 50px;
 	background-color: ${props => (props.$isDark ? 'green' : 'lightgray')};
 	user-select: none;
-	cursor: ${props => (props.$hasPiece ? 'pointer' : 'default')};
+	cursor: ${props => (props.$hasPiece ? 'grab' : 'default')};
 
-	:focus {
-		cursor: ${props => (props.$hasPiece ? 'grab' : 'default')};
+	&.drag-active {
+		cursor: grabbing;
 	}
 `;
 
@@ -34,16 +34,19 @@ export const Square = ({ rank, file, piece, isDark }: Props) => {
 			return;
 		}
 
+		const squares = document.getElementsByClassName('square');
+		console.log({ squares });
+		for (let i = 0; i < squares.length; i++) {
+			const square = squares[i];
+			square.classList.add('drag-active');
+		}
+
 		dispatch(setDraggedPiece({ name: piece, rank, file }));
 
 		const pieceImage = document.getElementById(`rank${rank},file${file}`);
 		if (pieceImage) {
 			pieceImage.style.display = 'none';
 		}
-	};
-
-	const cancelClick = (e: React.MouseEvent) => {
-		e.preventDefault();
 	};
 
 	return (
@@ -54,6 +57,7 @@ export const Square = ({ rank, file, piece, isDark }: Props) => {
 			$hasPiece={!!piece}
 			onMouseDown={e => handleMouseDown(e, piece)}
 			onContextMenu={e => e.preventDefault()}
+			className="square"
 		>
 			{piece && (
 				<img
@@ -61,7 +65,6 @@ export const Square = ({ rank, file, piece, isDark }: Props) => {
 					src={require(`../../assets/${piece}.png`)}
 					width="45px"
 					height="45px"
-					onClick={cancelClick}
 				/>
 			)}
 		</StyledSquare>

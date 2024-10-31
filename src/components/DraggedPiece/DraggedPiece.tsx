@@ -65,6 +65,12 @@ export const DraggedPiece = () => {
 	const handleMouseUp = () => {
 		if (!piece) return;
 
+		const squares = document.getElementsByClassName('square');
+		for (let i = 0; i < squares.length; i++) {
+			const square = squares[i];
+			square.classList.remove('drag-active');
+		}
+
 		dispatch(setDraggedPiece({ name: '', rank, file }));
 
 		const pieceImage = document.getElementById(`rank${rank},file${file}`);
