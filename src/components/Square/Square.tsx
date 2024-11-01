@@ -48,7 +48,7 @@ export const Square = React.memo(
 			dispatch(setDraggedPiece({ name: piece, rank, file }));
 		};
 
-		let imgUrl;
+		let imgUrl: string;
 		if (piece && !isDraggedPiece) {
 			imgUrl = require(`../../assets/${piece}.png`);
 		} else {

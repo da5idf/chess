@@ -34,6 +34,7 @@ export const DraggedPiece = ({ gameBoardRef }: Props) => {
 
 	const { name: piece } = useAppSelector(state => state.draggedPiece);
 	const SQUARE_SIZE = useAppSelector(state => state.game.squareSize);
+	const { mouseX, mouseY } = useMousePosition();
 
 	const handleMouseUp = () => {
 		if (!piece) return;
@@ -47,8 +48,6 @@ export const DraggedPiece = ({ gameBoardRef }: Props) => {
 			window.removeEventListener('mouseup', handleMouseUp);
 		};
 	});
-
-	const { mouseX, mouseY } = useMousePosition();
 
 	const board = gameBoardRef.current;
 	if (!board) return;

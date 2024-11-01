@@ -1,8 +1,15 @@
 import React from 'react';
 import { useAppSelector } from '../../hooks/reduxHooks';
+import styled from 'styled-components';
 
-import { ChessBoardGrid } from './StyledComponents';
 import { Square } from '../Square/Square';
+
+const ChessBoardGrid = styled.div`
+	position: relative;
+	display: grid;
+	grid-template-columns: repeat(8, 1fr);
+	width: fit-content;
+`;
 
 export const ChessBoard = React.forwardRef<HTMLDivElement>((_, ref) => {
 	const board = useAppSelector(state => state.game.board);
