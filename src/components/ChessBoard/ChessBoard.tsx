@@ -13,7 +13,7 @@ export const ChessBoard = React.forwardRef<HTMLDivElement>((_, ref) => {
 	const { mouseX, mouseY } = useMousePosition();
 
 	return (
-		<Presenter.Container>
+		<Presenter.Container ref={ref}>
 			<Squares />
 			{board.map((row, rank) => {
 				return row.map((piece, file) => {
@@ -32,9 +32,9 @@ export const ChessBoard = React.forwardRef<HTMLDivElement>((_, ref) => {
 							rank={rank}
 							file={file}
 							dragActive={!!draggedPiece.name}
+							isDraggedPiece={isDraggedPiece}
 							positionX={positionX}
 							positionY={positionY}
-							isDraggedPiece={isDraggedPiece}
 						/>
 					);
 				});

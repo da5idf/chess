@@ -12,15 +12,12 @@ interface HighlightedSquareProps {
 const Highlight = styled.div.attrs<HighlightedSquareProps>(
 	({ $positionX, $positionY }) => ({
 		style: {
-			left: 0,
-			top: 0,
-			// left: `${$positionX}px`,
-			// top: `${$positionY}px`,
+			left: `${$positionX}px`,
+			top: `${$positionY}px`,
 		},
 	})
 )`
 	position: absolute;
-	z-index: 101;
 	width: 80px;
 	height: 80px;
 	top: 0;
@@ -56,7 +53,9 @@ export const HighlightedSquare = ({ gameBoardRef }: Props) => {
 	const { mouseX, mouseY } = useMousePosition();
 
 	const board = gameBoardRef.current;
-	if (!board) return;
+	if (!board) {
+		return;
+	}
 	const { top, bottom, left, right } = board?.getBoundingClientRect();
 
 	let newX: number;
@@ -86,5 +85,5 @@ export const HighlightedSquare = ({ gameBoardRef }: Props) => {
 
 	if (!piece) return null;
 
-	return <Highlight $positionX={newX + 80} $positionY={newY + 80} />;
+	return <Highlight $positionX={newX} $positionY={newY} />;
 };

@@ -18,9 +18,11 @@ export const Game = () => {
 	const gameBoardRef = useRef<HTMLDivElement>(null);
 
 	return (
-		<GameContainer>
+		<GameContainer className="container">
 			<ChessBoard ref={gameBoardRef} />
+			<div className="before"></div>
 			<HighlightedSquare gameBoardRef={gameBoardRef} />
+			<div className="after"></div>
 		</GameContainer>
 	);
 };
