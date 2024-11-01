@@ -50,7 +50,9 @@ export const Square = ({
 			e.preventDefault();
 			return;
 		}
-		dispatch(setDraggedPiece({ name: piece, rank, file }));
+		if (piece) {
+			dispatch(setDraggedPiece({ name: piece, rank, file }));
+		}
 	};
 
 	let imgUrl: string;
