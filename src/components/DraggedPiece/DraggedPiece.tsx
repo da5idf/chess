@@ -7,20 +7,21 @@ import { useMousePosition } from '../../hooks/useMousePosition';
 interface DraggedPieceProps {
 	$positionX: number;
 	$positionY: number;
+	$size: number;
 }
 
 const MovingPiece = styled.img.attrs<DraggedPieceProps>(
-	({ $positionX, $positionY }) => ({
+	({ $positionX, $positionY, $size }) => ({
 		style: {
-			left: `${$positionX - 25}px`,
-			top: `${$positionY - 25}px`,
+			left: `${$positionX - $size / 2}px`,
+			top: `${$positionY - $size / 2}px`,
 		},
 	})
 )`
 	position: absolute;
 	z-index: 100;
-	width: 50px;
-	height: 50px;
+	width: ${props => props.$size}px;
+	height: ${props => props.$size}px;
 	pointer-events: none;
 `;
 
@@ -31,28 +32,12 @@ type Props = {
 export const DraggedPiece = ({ gameBoardRef }: Props) => {
 	const dispatch = useAppDispatch();
 
-	const {
-		name: piece,
-		rank,
-		file,
-	} = useAppSelector(state => state.draggedPiece);
+	const { name: piece } = useAppSelector(state => state.draggedPiece);
+	const SQUARE_SIZE = useAppSelector(state => state.game.squareSize);
 
 	const handleMouseUp = () => {
 		if (!piece) return;
-
-		dispatch(setDraggedPiece({ name: '', rank, file }));
-
-		const squares = document.getElementsByClassName('square');
-		for (let i = 0; i < squares.length; i++) {
-			const square = squares[i];
-			square.classList.remove('drag-active');
-		}
-
-		const pieceImage = document.getElementById(`rank${rank},file${file}`);
-
-		if (pieceImage) {
-			pieceImage.style.display = 'block';
-		}
+		dispatch(setDraggedPiece({ name: '', rank: -1, file: -1 }));
 	};
 
 	useEffect(() => {
@@ -94,6 +79,7 @@ export const DraggedPiece = ({ gameBoardRef }: Props) => {
 		<MovingPiece
 			$positionX={newX}
 			$positionY={newY}
+			$size={SQUARE_SIZE}
 			src={require(`../../assets/${piece}.png`)}
 		/>
 	);
