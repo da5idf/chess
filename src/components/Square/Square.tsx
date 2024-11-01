@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 import { setDraggedPiece } from '../../redux/draggedPieceSlice';
-import React from 'react';
 
 type Props = {
 	rank: number;
@@ -34,39 +33,44 @@ const StyledSquare = styled.div<{
 	background-size: cover;
 `;
 
-export const Square = React.memo(
-	({ rank, file, piece, isDark, inDrag, isDraggedPiece }: Props) => {
-		console.log('SQUARE!');
-		const dispatch = useAppDispatch();
-		const SQUARE_SIZE = useAppSelector(state => state.game.squareSize);
+export const Square = ({
+	rank,
+	file,
+	piece,
+	isDark,
+	inDrag,
+	isDraggedPiece,
+}: Props) => {
+	console.log('SQUARE!');
+	const dispatch = useAppDispatch();
+	const SQUARE_SIZE = useAppSelector(state => state.game.squareSize);
 
-		const handleMouseDown = (e: React.MouseEvent, piece: string) => {
-			if (e.button !== 0) {
-				e.preventDefault();
-				return;
-			}
-			dispatch(setDraggedPiece({ name: piece, rank, file }));
-		};
-
-		let imgUrl: string;
-		if (piece && !isDraggedPiece) {
-			imgUrl = require(`../../assets/${piece}.png`);
-		} else {
-			imgUrl = '';
+	const handleMouseDown = (e: React.MouseEvent, piece: string) => {
+		if (e.button !== 0) {
+			e.preventDefault();
+			return;
 		}
+		dispatch(setDraggedPiece({ name: piece, rank, file }));
+	};
 
-		return (
-			<StyledSquare
-				data-rank={rank}
-				data-file={file}
-				$isDark={isDark}
-				$hasPiece={!!piece}
-				$inDrag={inDrag}
-				$imgUrl={imgUrl}
-				$size={SQUARE_SIZE}
-				onMouseDown={e => handleMouseDown(e, piece)}
-				onContextMenu={e => e.preventDefault()}
-			/>
-		);
+	let imgUrl: string;
+	if (piece && !isDraggedPiece) {
+		imgUrl = require(`../../assets/${piece}.png`);
+	} else {
+		imgUrl = '';
 	}
-);
+
+	return (
+		<StyledSquare
+			data-rank={rank}
+			data-file={file}
+			$isDark={isDark}
+			$hasPiece={!!piece}
+			$inDrag={inDrag}
+			$imgUrl={imgUrl}
+			$size={SQUARE_SIZE}
+			onMouseDown={e => handleMouseDown(e, piece)}
+			onContextMenu={e => e.preventDefault()}
+		/>
+	);
+};
