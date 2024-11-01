@@ -2,6 +2,7 @@ import styled from 'styled-components';
 
 import { ChessBoard } from '../ChessBoard';
 import { DraggedPiece } from '../DraggedPiece';
+import { useRef } from 'react';
 
 const GameContainer = styled.div`
 	display: flex;
@@ -13,10 +14,12 @@ const GameContainer = styled.div`
 `;
 
 export const Game = () => {
+	const gameBoardRef = useRef<HTMLDivElement>(null);
+
 	return (
 		<GameContainer>
-			<ChessBoard />
-			<DraggedPiece />
+			<ChessBoard ref={gameBoardRef} />
+			<DraggedPiece gameBoardRef={gameBoardRef} />
 		</GameContainer>
 	);
 };

@@ -15,7 +15,8 @@ const StyledSquare = styled.div<{ $isDark: boolean; $hasPiece: boolean }>`
 	align-items: center;
 	width: 50px;
 	height: 50px;
-	background-color: ${props => (props.$isDark ? 'green' : 'lightgray')};
+	background-color: ${props =>
+		props.$isDark ? 'rgb(115,149,82)' : 'rgb(235,236,208)'};
 	user-select: none;
 	cursor: ${props => (props.$hasPiece ? 'grab' : 'default')};
 
@@ -33,15 +34,15 @@ export const Square = ({ rank, file, piece, isDark }: Props) => {
 			e.preventDefault();
 			return;
 		}
-
-		const squares = document.getElementsByClassName('square');
-		console.log({ squares });
-		for (let i = 0; i < squares.length; i++) {
-			const square = squares[i];
-			square.classList.add('drag-active');
-		}
-
 		dispatch(setDraggedPiece({ name: piece, rank, file }));
+
+		if (piece) {
+			const squares = document.getElementsByClassName('square');
+			for (let i = 0; i < squares.length; i++) {
+				const square = squares[i];
+				square.classList.add('drag-active');
+			}
+		}
 
 		const pieceImage = document.getElementById(`rank${rank},file${file}`);
 		if (pieceImage) {
