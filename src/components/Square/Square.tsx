@@ -5,7 +5,8 @@ import { setDraggedPiece } from '../../redux/draggedPieceSlice';
 type Props = {
 	rank: number;
 	file: number;
-	piece: string;
+	color: string;
+	pieceName: string;
 	isDark: boolean;
 	inDrag: boolean;
 	isDraggedPiece: boolean;
@@ -36,14 +37,15 @@ const StyledSquare = styled.div<{
 export const Square = ({
 	rank,
 	file,
-	piece,
+	color,
+	pieceName,
 	isDark,
 	inDrag,
 	isDraggedPiece,
 }: Props) => {
-	console.log('SQUARE!');
 	const dispatch = useAppDispatch();
 	const SQUARE_SIZE = useAppSelector(state => state.game.squareSize);
+	const piece = color + pieceName;
 
 	const handleMouseDown = (e: React.MouseEvent, piece: string) => {
 		if (e.button !== 0) {
@@ -51,7 +53,7 @@ export const Square = ({
 			return;
 		}
 		if (piece) {
-			dispatch(setDraggedPiece({ name: piece, rank, file }));
+			dispatch(setDraggedPiece({ color, name: pieceName, rank, file }));
 		}
 	};
 
@@ -64,8 +66,6 @@ export const Square = ({
 
 	return (
 		<StyledSquare
-			data-rank={rank}
-			data-file={file}
 			$isDark={isDark}
 			$hasPiece={!!piece}
 			$inDrag={inDrag}

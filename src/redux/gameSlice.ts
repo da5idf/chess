@@ -1,9 +1,9 @@
-import { initialBoard } from '../logic';
+import { initialBoard, Piece } from '../logic';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-
 export interface GameState {
 	piece: string;
-	squareSize: 80;
+	squareSize: number;
+	board: Piece[][];
 }
 
 const initialState = {
@@ -20,7 +20,10 @@ export const gameSlice = createSlice({
 			state,
 			action: PayloadAction<{ rank: number; file: number }>
 		) => {
-			state.board[action.payload.rank][action.payload.file] = '';
+			state.board[action.payload.rank][action.payload.file] = {
+				color: '',
+				name: '',
+			};
 		},
 	},
 });

@@ -67,5 +67,13 @@ export const HighlightedSquare = ({ gameBoardRef }: Props) => {
 
 	if (!piece) return null;
 
-	return <Highlight $positionX={newX} $positionY={newY} $size={SQUARE_SIZE} />;
+	return (
+		<Highlight
+			data-rank={highlightRank}
+			data-file={highlightFile}
+			$positionX={newX}
+			$positionY={newY}
+			$size={SQUARE_SIZE}
+		/>
+	);
 };

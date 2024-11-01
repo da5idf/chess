@@ -16,11 +16,13 @@ export const ChessBoard = React.forwardRef<HTMLDivElement>((_, ref) => {
 	const draggedPiece = useAppSelector(state => state.draggedPiece);
 
 	const inDrag = !!draggedPiece.name;
+	console.log(inDrag);
 
 	return (
 		<ChessBoardGrid id="ChessBoard" ref={ref}>
 			{board.map((row, rank) => {
 				return row.map((piece, file) => {
+					const { color, name } = piece;
 					const isDark = (rank + file) % 2 === 1;
 					const isDraggedPiece =
 						draggedPiece.rank === rank && draggedPiece.file === file;
@@ -30,7 +32,8 @@ export const ChessBoard = React.forwardRef<HTMLDivElement>((_, ref) => {
 							key={`${rank}-${file}`}
 							rank={rank}
 							file={file}
-							piece={piece}
+							color={color}
+							pieceName={name}
 							isDark={isDark}
 							inDrag={inDrag}
 							isDraggedPiece={isDraggedPiece}

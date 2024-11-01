@@ -3,6 +3,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 import { RefObject, useEffect } from 'react';
 import styled from 'styled-components';
 import { useMousePosition } from '../../hooks/useMousePosition';
+import { isValidMove } from '../../logic';
 
 interface DraggedPieceProps {
 	$positionX: number;
@@ -32,13 +33,20 @@ type Props = {
 export const DraggedPiece = ({ gameBoardRef }: Props) => {
 	const dispatch = useAppDispatch();
 
-	const { name: piece } = useAppSelector(state => state.draggedPiece);
-	const SQUARE_SIZE = useAppSelector(state => state.game.squareSize);
+	const { color, name: pieceName } = useAppSelector(
+		state => state.draggedPiece
+	);
+	const { squareSize: SQUARE_SIZE, board: boardState } = useAppSelector(
+		state => state.game
+	);
 	const { mouseX, mouseY } = useMousePosition();
 
-	const handleMouseUp = () => {
-		if (!piece) return;
-		dispatch(setDraggedPiece({ name: '', rank: -1, file: -1 }));
+	const piece = color + pieceName;
+
+	const handleMouseUp = (e: MouseEvent) => {
+		if (!piece || !isValidMove(e, color, pieceName, boardState)) return;
+
+		dispatch(setDraggedPiece({ color: '', name: '', rank: -1, file: -1 }));
 	};
 
 	useEffect(() => {
