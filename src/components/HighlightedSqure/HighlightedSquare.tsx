@@ -4,31 +4,33 @@ import { RefObject, useEffect } from 'react';
 import styled from 'styled-components';
 import { useMousePosition } from '../../hooks/useMousePosition';
 
-interface DraggedPieceProps {
+interface HighlightedSquareProps {
 	$positionX: number;
 	$positionY: number;
 }
 
-const MovingPiece = styled.img.attrs<DraggedPieceProps>(
+const Highlight = styled.div.attrs<HighlightedSquareProps>(
 	({ $positionX, $positionY }) => ({
 		style: {
-			left: `${$positionX - 25}px`,
-			top: `${$positionY - 25}px`,
+			left: `${$positionX}px`,
+			top: `${$positionY}px`,
 		},
 	})
 )`
 	position: absolute;
-	z-index: 100;
 	width: 50px;
 	height: 50px;
-	pointer-events: none;
+	top: 0;
+	left: 0;
+	outline: 4px solid lightgray;
+	outline-offset: -4px;
 `;
 
 type Props = {
 	gameBoardRef: RefObject<HTMLDivElement>;
 };
 
-export const DraggedPiece = ({ gameBoardRef }: Props) => {
+export const HighlightedSquare = ({ gameBoardRef }: Props) => {
 	const dispatch = useAppDispatch();
 
 	const {
@@ -40,13 +42,13 @@ export const DraggedPiece = ({ gameBoardRef }: Props) => {
 	const handleMouseUp = () => {
 		if (!piece) return;
 
-		dispatch(setDraggedPiece({ name: '', rank, file }));
-
 		const squares = document.getElementsByClassName('square');
 		for (let i = 0; i < squares.length; i++) {
 			const square = squares[i];
 			square.classList.remove('drag-active');
 		}
+
+		dispatch(setDraggedPiece({ name: '', rank, file }));
 
 		const pieceImage = document.getElementById(`rank${rank},file${file}`);
 
@@ -74,27 +76,27 @@ export const DraggedPiece = ({ gameBoardRef }: Props) => {
 
 	if (mouseX < left) {
 		newX = left;
-	} else if (mouseX > right) {
-		newX = right;
+	} else if (mouseX > right - 50) {
+		newX = right - 50;
 	} else {
 		newX = mouseX;
 	}
 
 	if (mouseY < top) {
 		newY = top;
-	} else if (mouseY > bottom) {
-		newY = bottom;
+	} else if (mouseY > bottom - 50) {
+		newY = bottom - 50;
 	} else {
 		newY = mouseY;
 	}
 
+	const highlightFile = Math.floor((newX - left) / 50);
+	const highlightRank = Math.floor((newY - top) / 50);
+
+	newX = left + highlightFile * 50;
+	newY = top + highlightRank * 50;
+
 	if (!piece) return null;
 
-	return (
-		<MovingPiece
-			$positionX={newX}
-			$positionY={newY}
-			src={require(`../../assets/${piece}.png`)}
-		/>
-	);
+	return <Highlight $positionX={newX} $positionY={newY} />;
 };

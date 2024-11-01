@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { useAppDispatch } from '../../hooks/reduxHooks';
 import { setDraggedPiece } from '../../redux/draggedPieceSlice';
+import React from 'react';
 
 type Props = {
 	rank: number;
@@ -9,7 +10,10 @@ type Props = {
 	isDark: boolean;
 };
 
-const StyledSquare = styled.div<{ $isDark: boolean; $hasPiece: boolean }>`
+const StyledSquare = styled.div<{
+	$isDark: boolean;
+	$hasPiece: boolean;
+}>`
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -25,7 +29,7 @@ const StyledSquare = styled.div<{ $isDark: boolean; $hasPiece: boolean }>`
 	}
 `;
 
-export const Square = ({ rank, file, piece, isDark }: Props) => {
+export const Square = React.memo(({ rank, file, piece, isDark }: Props) => {
 	console.log('SQUARE!');
 	const dispatch = useAppDispatch();
 
@@ -38,6 +42,7 @@ export const Square = ({ rank, file, piece, isDark }: Props) => {
 
 		if (piece) {
 			const squares = document.getElementsByClassName('square');
+			console.log({ length: squares.length });
 			for (let i = 0; i < squares.length; i++) {
 				const square = squares[i];
 				square.classList.add('drag-active');
@@ -70,4 +75,4 @@ export const Square = ({ rank, file, piece, isDark }: Props) => {
 			)}
 		</StyledSquare>
 	);
-};
+});
