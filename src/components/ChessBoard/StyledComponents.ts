@@ -1,28 +1,17 @@
 import styled from 'styled-components';
 
-export const ChessBoardGrid = styled.div`
+export const Container = styled.div`
 	position: relative;
-	display: grid;
-	grid-template-columns: repeat(8, 50px);
-	width: fit-content;
-	overflow: hidden;
 `;
 
-interface DraggedPieceProps {
-	$positionX: number;
-	$positionY: number;
-}
+export const Squares = styled.div`
+	display: grid;
+	grid-template-columns: repeat(8, 80px);
+	width: fit-content;
+`;
 
-export const DraggedPiece = styled.img.attrs<DraggedPieceProps>(
-	({ $positionX, $positionY }) => ({
-		style: {
-			left: `${$positionX}px`,
-			top: `${$positionY}px`,
-		},
-	})
-)`
-	position: absolute;
-	width: 50px;
-	height: 50px;
-	pointer-events: none;
+export const Square = styled.div<{ $isDark: boolean }>`
+	height: 80px;
+	background-color: ${props =>
+		props.$isDark ? 'rgb(115,149,82)' : 'rgb(235,236,208)'};
 `;

@@ -2,14 +2,14 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface DraggedPieceState {
 	name: string;
-	rank: number | null;
-	file: number | null;
+	rank: number;
+	file: number;
 }
 
 const initialState: DraggedPieceState = {
 	name: '',
-	rank: null,
-	file: null,
+	rank: -1,
+	file: -1,
 };
 
 export const draggedPieceSlice = createSlice({

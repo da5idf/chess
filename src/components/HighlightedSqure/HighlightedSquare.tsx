@@ -12,14 +12,17 @@ interface HighlightedSquareProps {
 const Highlight = styled.div.attrs<HighlightedSquareProps>(
 	({ $positionX, $positionY }) => ({
 		style: {
-			left: `${$positionX}px`,
-			top: `${$positionY}px`,
+			left: 0,
+			top: 0,
+			// left: `${$positionX}px`,
+			// top: `${$positionY}px`,
 		},
 	})
 )`
 	position: absolute;
-	width: 50px;
-	height: 50px;
+	z-index: 101;
+	width: 80px;
+	height: 80px;
 	top: 0;
 	left: 0;
 	outline: 4px solid lightgray;
@@ -32,29 +35,14 @@ type Props = {
 
 export const HighlightedSquare = ({ gameBoardRef }: Props) => {
 	const dispatch = useAppDispatch();
+	const SQUARE_WIDTH = 80;
 
-	const {
-		name: piece,
-		rank,
-		file,
-	} = useAppSelector(state => state.draggedPiece);
+	const { name: piece } = useAppSelector(state => state.draggedPiece);
 
 	const handleMouseUp = () => {
 		if (!piece) return;
 
-		const squares = document.getElementsByClassName('square');
-		for (let i = 0; i < squares.length; i++) {
-			const square = squares[i];
-			square.classList.remove('drag-active');
-		}
-
-		dispatch(setDraggedPiece({ name: '', rank, file }));
-
-		const pieceImage = document.getElementById(`rank${rank},file${file}`);
-
-		if (pieceImage) {
-			pieceImage.style.display = 'block';
-		}
+		dispatch(setDraggedPiece({ name: '', rank: -1, file: -1 }));
 	};
 
 	useEffect(() => {
@@ -76,27 +64,27 @@ export const HighlightedSquare = ({ gameBoardRef }: Props) => {
 
 	if (mouseX < left) {
 		newX = left;
-	} else if (mouseX > right - 50) {
-		newX = right - 50;
+	} else if (mouseX > right - SQUARE_WIDTH) {
+		newX = right - SQUARE_WIDTH;
 	} else {
 		newX = mouseX;
 	}
 
 	if (mouseY < top) {
 		newY = top;
-	} else if (mouseY > bottom - 50) {
-		newY = bottom - 50;
+	} else if (mouseY > bottom - SQUARE_WIDTH) {
+		newY = bottom - SQUARE_WIDTH;
 	} else {
 		newY = mouseY;
 	}
 
-	const highlightFile = Math.floor((newX - left) / 50);
-	const highlightRank = Math.floor((newY - top) / 50);
+	const highlightFile = Math.floor((newX - left) / SQUARE_WIDTH);
+	const highlightRank = Math.floor((newY - top) / SQUARE_WIDTH);
 
-	newX = left + highlightFile * 50;
-	newY = top + highlightRank * 50;
+	newX = left + highlightFile * SQUARE_WIDTH;
+	newY = top + highlightRank * SQUARE_WIDTH;
 
 	if (!piece) return null;
 
-	return <Highlight $positionX={newX} $positionY={newY} />;
+	return <Highlight $positionX={newX + 80} $positionY={newY + 80} />;
 };

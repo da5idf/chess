@@ -1,28 +1,44 @@
 import React from 'react';
 import { useAppSelector } from '../../hooks/reduxHooks';
 
-import { ChessBoardGrid } from './StyledComponents';
-import { Square } from '../Square';
+import * as Presenter from './StyledComponents';
+import { Piece } from './Piece';
+import { useMousePosition } from '../../hooks/useMousePosition';
+import { Squares } from './Squares';
 
 export const ChessBoard = React.forwardRef<HTMLDivElement>((_, ref) => {
 	const board = useAppSelector(state => state.game.board);
+	const draggedPiece = useAppSelector(state => state.draggedPiece);
+
+	const { mouseX, mouseY } = useMousePosition();
 
 	return (
-		<ChessBoardGrid id="ChessBoard" ref={ref}>
+		<Presenter.Container>
+			<Squares />
 			{board.map((row, rank) => {
 				return row.map((piece, file) => {
-					const isDark = (rank + file) % 2 === 1;
+					let positionX = 0;
+					let positionY = 0;
+					let isDraggedPiece = false;
+					if (draggedPiece.rank === rank && draggedPiece.file === file) {
+						positionX = mouseX;
+						positionY = mouseY;
+						isDraggedPiece = true;
+					}
 					return (
-						<Square
-							key={`${rank}-${file}`}
+						<Piece
+							key={`piece-${rank}-${file}`}
+							piece={piece}
 							rank={rank}
 							file={file}
-							piece={piece}
-							isDark={isDark}
+							dragActive={!!draggedPiece.name}
+							positionX={positionX}
+							positionY={positionY}
+							isDraggedPiece={isDraggedPiece}
 						/>
 					);
 				});
 			})}
-		</ChessBoardGrid>
+		</Presenter.Container>
 	);
 });
